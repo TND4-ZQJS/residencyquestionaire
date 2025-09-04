@@ -583,18 +583,48 @@ addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
 
 /* ---------- toggle swotch for Past12 and Next12 Container---------- */
 
+const togglePast = document.getElementById("togglePast");
 const toggleNext = document.getElementById("toggleNext");
+const nomineesContainer = document.getElementById("nomineesContainer");
 const next12Container = document.getElementById("next12Container");
+const addNomineeBtn = document.getElementById("addNominee");
+const addNext12Btn = document.getElementById("addNext12");
 
 function updateToggleUI() {
-  next12Container.style.display = toggleNext.checked ? "block" : "none";
-  nomineeContainer.style.display = togglePast.checked ? "block" : "none";
+  // Past toggle
+  if (togglePast.checked) {
+    nomineesContainer.style.display = "block";
+    addNomineeBtn.style.display = "inline-block";
+  } else {
+    nomineesContainer.style.display = "none";
+    addNomineeBtn.style.display = "none";
+  }
 
+  // Next toggle
+  if (toggleNext.checked) {
+    next12Container.style.display = "block";
+    addNext12Btn.style.display = "inline-block";
+  } else {
+    next12Container.style.display = "none";
+    addNext12Btn.style.display = "none";
+  }
+
+  // Save both states
   localStorage.setItem("travelPeriod", JSON.stringify({
     past: togglePast.checked,
     next: toggleNext.checked
   }));
 }
+
+togglePast.addEventListener("change", updateToggleUI);
+toggleNext.addEventListener("change", updateToggleUI);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const saved = JSON.parse(localStorage.getItem("travelPeriod") || "{}");
+  togglePast.checked = saved.past || false;
+  toggleNext.checked = saved.next || false;
+  updateToggleUI();
+});
 
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
