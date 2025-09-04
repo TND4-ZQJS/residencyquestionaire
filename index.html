@@ -581,17 +581,13 @@ if (next12Count === 0) {
 
 addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
 
-/* ---------- toggle swotch for Past12 and Next12 Container---------- */
 
+/* ---------- toggle switch for Past12 and Next12 Container ---------- */
 const togglePast = document.getElementById("togglePast");
 const toggleNext = document.getElementById("toggleNext");
-const nomineesContainer = document.getElementById("nomineesContainer");
-const next12Container = document.getElementById("next12Container");
-const addNomineeBtn = document.getElementById("addNominee");
-const addNext12Btn = document.getElementById("addNext12");
 
 function updateToggleUI() {
-  // Past toggle
+  // Show/hide past 12 months container + button
   if (togglePast.checked) {
     nomineesContainer.style.display = "block";
     addNomineeBtn.style.display = "inline-block";
@@ -600,7 +596,7 @@ function updateToggleUI() {
     addNomineeBtn.style.display = "none";
   }
 
-  // Next toggle
+  // Show/hide next 12 months container + button
   if (toggleNext.checked) {
     next12Container.style.display = "block";
     addNext12Btn.style.display = "inline-block";
@@ -609,16 +605,18 @@ function updateToggleUI() {
     addNext12Btn.style.display = "none";
   }
 
-  // Save both states
+  // Save state to localStorage
   localStorage.setItem("travelPeriod", JSON.stringify({
     past: togglePast.checked,
     next: toggleNext.checked
   }));
 }
 
+// Bind events
 togglePast.addEventListener("change", updateToggleUI);
 toggleNext.addEventListener("change", updateToggleUI);
 
+// On page load, restore saved state
 document.addEventListener("DOMContentLoaded", () => {
   const saved = JSON.parse(localStorage.getItem("travelPeriod") || "{}");
   togglePast.checked = saved.past || false;
