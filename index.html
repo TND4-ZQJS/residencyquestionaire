@@ -106,8 +106,8 @@
       <section class="section">
       <label style="flex:1"> In the past 1 year, how many days did you spend in Malaysia?</label>
       <div class="row">
-      <label class="inline"><input name="Lessthen183" id="ResQ_Morethan183" type="radio">Less than a total of 183 days a year</label>
-      <label class="inline"><input name="Morethan183" id="ResQ_Lessthan183" type="radio">More than a total of 183 days a year </label>
+      <label class="inline"><input name="ResQ_183Daya" id="ResQ_Lessthan183" type="radio">Less than a total of 183 days a year</label>
+      <label class="inline"><input name="ResQ_183Daya" id="ResQ_Morethan183" type="radio">More than a total of 183 days a year </label>
     </div>
       </section>
 
@@ -403,7 +403,7 @@ function createNomineeEntry(index){
     <label>Purpose
       <input type="text" id="ResQ_Travel_Purpose${index}">
     </label>
-';
+`;
 
   // Auto uppercase for all text inputs (Nominee Container)
   wrap.querySelectorAll("input[type=text]").forEach(el=>{
@@ -493,7 +493,7 @@ if (nomineeCount === 0) {
 addNomineeBtn.disabled = nomineeCount >= MAX_NOMINEES;
 
 /* ---------- SECTION next 12 months Container ---------- */
-const next12Container = $("Next12Container");
+const next12Container = $("next12Container");
 const addNext12Btn = $("addNext12");
 let next12Count = parseInt(localStorage.getItem("next12Count")) || 0;
 
@@ -521,7 +521,7 @@ function createNext12Entry(index){
       <input type="text" id="ResQ_TravelN12_Date${index}">
     </label>
     <label>Purpose
-      <input type="text" id="ResQ_Travel_Nurpose${index}">
+      <input type="text" id="ResQ_Travel_Purpose${index}">
     </label>
 
      `;
@@ -577,7 +577,7 @@ function createNext12Entry(index){
 
 // ADD Next12 Entry (Next12 Container)
 function addNext12(){
-  if(next12Count >= MAX_ NEXT12ENTRY) return;
+  if(next12Count >= MAX_NEXT12ENTRY) return;
   next12Count++;
   const node = createNext12Entry(next12Count);
   next12Container.appendChild(node);
