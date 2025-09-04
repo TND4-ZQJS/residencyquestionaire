@@ -370,41 +370,24 @@ function createNomineeEntry(index){
   wrap.className = "nominee";
   wrap.dataset.index = index;
   wrap.innerHTML = `
-    <h3><span>Nominee Entry ${index}</span>
+    <h3><span>Past 12 Months Entry ${index}</span>
     <button type="button" class="remove-btn" aria-label="Remove nominee">Remove</button></h3>
-    <label>Nominee Name<input type="text" id="Nom_Nominee${index}_Name"></label>
-    <div class="row">
-    <label>Date of Birth</label>
-     <div class="row" style="flex:1">
-        <label style="flex:1">Day
-            <select id="Nom_Nominee${index}_DD"><option value="">-- Day (DD) --</option>${dayOptionsHTML()}</select>
-        </label>
-        <label style="flex:1">Month
-            <select id="Nom_Nominee${index}_MM"><option value="">-- Month (MM) --</option>${monthOptionsHTML()}</select>
-        </label>
-        <label style="flex:1">Year
-            <input type="text" id="Nom_Nominee${index}_YYYY" placeholder="YYYY" maxlength="4">
-        </label>
-    </div>
-  </div>
-
-    <label>NRIC/Passport No.
-      <input type="text" id="Nom_Nominee${index}_NRICPassport">
+    <label>Country
+     <input type="text" id="ResQ_TravelP12_Country${index}"></label>
+    <label>Cities
+      <input type="text" id="ResQ_TravelP12_City${index}">
     </label>
-    <label>Email
-      <input type="text" id="Nom_Nominee${index}_Email">
+    <label>Duration Per Visit
+      <input type="text" id="ResQ_TravelP12_Duration${index}">
     </label>
-    <label>Mobile No.
-      <input type="text" id="Nom_Nominee${index}_Mobile">
+    <label>Frequency Per Year
+      <input type="text" id="ResQ_TravelP12_Frequency${index}">
     </label>
-    <label>Nationality
-      <input type="text" id="Nom_Nominee${index}_Nationality">
+    <label>Date
+      <input type="text" id="ResQ_TravelP12_Date${index}">
     </label>
-    <label>Relationship to Proposed Life Insured/Insured
-      <select id="Nom_Nominee${index}_Relationship"><option value="">-- CHOOSE --</option>${relationshipOptionsHTML()}</select>
-    </label>
-    <label>Percentage of Share (%)
-      <input type="number" id="Nom_Nominee${index}_Share">
+    <label>Purpose
+      <input type="text" id="ResQ_Travel_Purpose${index}">
     </label>
 
     <!-- UI CONDITION 1: Correspondence Address -->
