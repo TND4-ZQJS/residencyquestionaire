@@ -424,23 +424,7 @@ function createNomineeEntry(index){
     }
   });
 
-  // UI condition toggle (Nominee Container - Correspondence and Residential Address)
-  const hasCorres = wrap.querySelector("#Nom_Nominee"+index+"_HasCorres");
-  const corresWrap = wrap.querySelector("#Nom_Nominee"+index+"_CorresWrap");
-  const hasRes = wrap.querySelector("#Nom_Nominee"+index+"_HasRes");
-  const resWrap = wrap.querySelector("#Nom_Nominee"+index+"_ResWrap");
 
-  function updateVisibility(){
-    corresWrap.style.display = hasCorres.checked ? "block" : "none";
-    resWrap.style.display = (hasCorres.checked && hasRes.checked) ? "block" : "none";
-    saveElValue(hasCorres);
-    saveElValue(hasRes);
-  }
-  hasCorres.addEventListener("change", updateVisibility);
-  hasRes.addEventListener("change", updateVisibility);
-
-  // Restore visibility from saved state (Nominee Container)
-  updateVisibility();
 
   // Remove button (Nominee Container)
   wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
@@ -545,23 +529,7 @@ function createNext12Entry(index){
     }
   });
 
-  // UI condition toggle (Nominee Container - Correspondence and Residential Address)
-  const hasCorres = wrap.querySelector("#YesNext12");
-  const corresWrap = wrap.querySelector("#Nom_Nominee"+index+"_CorresWrap");
-  const hasRes = wrap.querySelector("#Nom_Nominee"+index+"_HasRes");
-  const resWrap = wrap.querySelector("#Nom_Nominee"+index+"_ResWrap");
 
-  function updateVisibility(){
-    corresWrap.style.display = hasCorres.checked ? "block" : "none";
-    resWrap.style.display = (hasCorres.checked && hasRes.checked) ? "block" : "none";
-    saveElValue(hasCorres);
-    saveElValue(hasRes);
-  }
-  hasCorres.addEventListener("change", updateVisibility);
-  hasRes.addEventListener("change", updateVisibility);
-
-  // Restore visibility from saved state (Next12 Container)
-  updateVisibility();
 
   // Remove button (Nominee Container)
   wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
