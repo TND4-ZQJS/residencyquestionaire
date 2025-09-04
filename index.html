@@ -403,45 +403,7 @@ function createNomineeEntry(index){
     <label>Purpose
       <input type="text" id="ResQ_Travel_Purpose${index}">
     </label>
-
-    <!-- UI CONDITION 1: Correspondence Address -->
-    <label>
-      <input type="checkbox" id="Nom_Nominee${index}_HasCorres"> Correspondence Address (if different from Proposed Life Insured/Insured)
-    </label>
-    <div class="corres-section" id="Nom_Nominee${index}_CorresWrap" style="display:none">
-      <label>Correspondence Address Line 1
-        <input type="text" id="Nom_Nominee${index}_CorresAdd_Line1">
-      </label>
-      <label>Correspondence Address Line 2
-        <input type="text" id="Nom_Nominee${index}_CorresAdd_Line2">
-      </label>
-      <label>Postcode
-        <input type="text" id="Nom_Nominee${index}_CorresAdd_Postcode">
-      </label>
-      <label>Country
-        <input type="text" id="Nom_Nominee${index}_CorresAdd_Country">
-      </label>
-
-<!-- UI CONDITION 2: Residential Address -->
-      <label>
-        <input type="checkbox" id="Nom_Nominee${index}_HasRes"> Residential Address (if different from Correspondence Address)
-      </label>
-      <div class="res-section" id="Nom_Nominee${index}_ResWrap" style="display:none">
-        <label>Residential Address Line 1
-          <input type="text" id="Nom_Nominee${index}_ResAdd_Line1">
-        </label>
-        <label>Residential Address Line 2
-          <input type="text" id="Nom_Nominee${index}_ResAdd_Line2">
-        </label>
-        <label>Postcode
-          <input type="text" id="Nom_Nominee${index}_ResAdd_Postcode">
-        </label>
-        <label>Country
-          <input type="text" id="Nom_Nominee${index}_ResAdd_Country">
-        </label>
-      </div>
-    </div>
-  `;
+';
 
   // Auto uppercase for all text inputs (Nominee Container)
   wrap.querySelectorAll("input[type=text]").forEach(el=>{
