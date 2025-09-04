@@ -107,16 +107,16 @@
       <section class="section">
       <label style="flex:1">In the past 12 months or next 12 months have you traveled or do you plan to travel out of Malaysia?</label>
       <div class="row">
-      <label class="inline"><input name="Religion" id="ResQ_Travel_Yes" type="radio">Yes</label>
-      <label class="inline"><input name="Religion" id="ResQ_Travel_No" type="radio">No</label>
+      <label class="inline"><input name="Travel" id="ResQ_Travel_Yes" type="radio">Yes</label>
+      <label class="inline"><input name="Travel" id="ResQ_Travel_No" type="radio">No</label>
       </div>
       <div class="row">
         <label class="inline">If yes, please provide travel details. </label>
       </div>
         <div class="row">
-          <label><input type="checkbox" id="Past12">Past 12 Months
+          <label><input type="checkbox" id="YesPast12">Past 12 Months
     </label>
-          <label><input type="checkbox" id="Next12">Next 12 Months
+          <label><input type="checkbox" id="YesNext12">Next 12 Months
     </label>
         </div>
         <div id="nomineesContainer" class="nominee-grid"></div>
@@ -282,6 +282,7 @@
 /* ---------- CONFIG ---------- */
 const PDF_FILENAME = "Nomination and Trustees_LF4056_LF4054_fillable.pdf";
 const MAX_NOMINEES = 5;
+const MAX_NEXT12ENTRY = 4;
 
 /* ---------- helpers ---------- */
 function $(id){return document.getElementById(id);}
@@ -515,6 +516,127 @@ if (nomineeCount === 0) {
 }
 
 addNomineeBtn.disabled = nomineeCount >= MAX_NOMINEES;
+
+/* ---------- SECTION next 12 months Container ---------- */
+const next12Container = $("Next12Container");
+const addNext12Btn = $("addNext12");
+let next12Count = parseInt(localStorage.getItem("next12Count")) || 0;
+
+   
+// Create Nominee Entry
+function createNext12Entry(index){
+  const wrap = document.createElement("div");
+  wrap.className = "next12";
+  wrap.dataset.index = index;
+  wrap.innerHTML = `
+    <h3><span>NEXT 12 Months Travel Details (Entry ${index})</span>
+    <button type="button" class="remove-btn" aria-label="Remove Entry">Remove</button></h3>
+    <label>Country
+     <input type="text" id="ResQ_TravelN12_Country${index}"></label>
+    <label>Cities
+      <input type="text" id="ResQ_TravelN12_City${index}">
+    </label>
+    <label>Duration Per Visit
+      <input type="text" id="ResQ_TravelN12_Duration${index}">
+    </label>
+    <label>Frequency Per Year
+      <input type="text" id="ResQ_TravelN12_Frequency${index}">
+    </label>
+    <label>Date
+      <input type="text" id="ResQ_TravelN12_Date${index}">
+    </label>
+    <label>Purpose
+      <input type="text" id="ResQ_Travel_Nurpose${index}">
+    </label>
+
+     `;
+
+  // Auto uppercase for all text inputs (Nominee Container)
+  wrap.querySelectorAll("input[type=text]").forEach(el=>{
+  if(el.id.includes("_Email")) return; // ❌ skip auto-uppercase for Email
+  el.addEventListener("input", ()=>{ 
+    el.value = el.value.toUpperCase(); 
+    saveElValue(el); 
+  });
+});
+
+  // Bind all inputs/selects to save (Nominess Container)
+  wrap.querySelectorAll("input, select").forEach(el=>{
+    autoBindSave(el);
+    const saved = localStorage.getItem(el.id);
+    if(saved!==null){
+      if(el.type==="checkbox") el.checked = saved==="true";
+      else el.value = saved;
+    }
+  });
+
+  // UI condition toggle (Nominee Container - Correspondence and Residential Address)
+  const hasCorres = wrap.querySelector("#YesNext12");
+  const corresWrap = wrap.querySelector("#Nom_Nominee"+index+"_CorresWrap");
+  const hasRes = wrap.querySelector("#Nom_Nominee"+index+"_HasRes");
+  const resWrap = wrap.querySelector("#Nom_Nominee"+index+"_ResWrap");
+
+  function updateVisibility(){
+    corresWrap.style.display = hasCorres.checked ? "block" : "none";
+    resWrap.style.display = (hasCorres.checked && hasRes.checked) ? "block" : "none";
+    saveElValue(hasCorres);
+    saveElValue(hasRes);
+  }
+  hasCorres.addEventListener("change", updateVisibility);
+  hasRes.addEventListener("change", updateVisibility);
+
+  // Restore visibility from saved state (Next12 Container)
+  updateVisibility();
+
+  // Remove button (Nominee Container)
+  wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
+    next12Container.removeChild(wrap);
+    next12Count = Math.max(0, next12Count - 1);
+    addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
+    renumberNext12();
+    showSaveStatus();
+  });
+
+  return wrap;
+}
+
+// ADD Next12 Entry (Next12 Container)
+function addNext12(){
+  if(next12Count >= MAX_ NEXT12ENTRY) return;
+  next12Count++;
+  const node = createNext12Entry(next12Count);
+  next12Container.appendChild(node);
+  addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
+  localStorage.setItem("next12Count", next12Count);
+  showSaveStatus();
+}
+
+// RENUMBER (Next12 Container)
+function renumberNext12(){
+  const cards = Array.from(next12Container.querySelectorAll(".next12"));
+  next12Count = cards.length;
+  localStorage.setItem("next12Count", next12Count);
+}
+
+// INIT (Next12 Container)
+addNext12Btn.addEventListener("click", addNext12);
+
+
+// Restore saved nominees (Next12 Container)
+// ---------- Next12 Initialization ----------
+if (next12Count === 0) {
+  // Always start with Next12 1
+  next12Count = 1;
+  localStorage.setItem("next12Count", next12Count);
+  next12Container.appendChild(createNext12Entry(1));
+} else {
+  // Restore all saved next12 1..next12Count
+  for (let i = 1; i <= next12Count; i++) {
+    next12Container.appendChild(createNext12Entry(i));
+  }
+}
+
+addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
 let sigTarget = null;
