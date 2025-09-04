@@ -121,18 +121,18 @@
         <label class="inline">If yes, please provide travel details. </label>
       </div>
         <div class="row">
-          <label><input type="checkbox" id="YesPast12">Past 12 Months
+          <label><input type="checkbox" id="togglePast">Past 12 Months
     </label>
-          <label><input type="checkbox" id="YesNext12">Next 12 Months
+          <label><input type="checkbox" id="toggleNext">Next 12 Months
     </label>
         </div>
-        <div id="nomineesContainer" class="nominee-grid"></div>
+        <div id="nomineesContainer" class="nominee-grid" style="display:none;"></div>
     <div class="row">
       <button id="addNominee">+ Add Another Nominee</button>
       <small class="muted">Up to 4 PAST-12-Months Entries</small>
     </div>
 
-         <div id="next12Container" class="next12-grid"></div>
+         <div id="next12Container" class="next12-grid" style="display:none;"></div>
     <div class="row">
       <button id="addNext12">+ Add Another Entry</button>
       <small class="muted">Up to 4 NEXT-12-Months Entries</small>
@@ -580,6 +580,22 @@ if (next12Count === 0) {
 }
 
 addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
+
+/* ---------- toggle swotch for Past12 and Next12 Container---------- */
+
+const toggleNext = document.getElementById("toggleNext");
+const next12Container = document.getElementById("next12Container");
+
+function updateToggleUI() {
+  next12Container.style.display = toggleNext.checked ? "block" : "none";
+  nomineeContainer.style.display = togglePast.checked ? "block" : "none";
+
+  localStorage.setItem("travelPeriod", JSON.stringify({
+    past: togglePast.checked,
+    next: toggleNext.checked
+  }));
+}
+
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
 let sigTarget = null;
