@@ -583,13 +583,39 @@ addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
 
 
 /* ---------- toggle switch for Past12 and Next12 Container ---------- */
+/* ---------- toggle switch for Travel Yes/No ---------- */
+const travelYes = document.getElementById("ResQ_Travel_Yes");
+const travelNo = document.getElementById("ResQ_Travel_No");
+const travelDetails = document.getElementById("travelDetails");
+
+/* ---------- toggle switch for Past12 and Next12 Container ---------- */
 const togglePast = document.getElementById("togglePast");
 const toggleNext = document.getElementById("toggleNext");
 const nomineeLimit = document.getElementById("nomineeLimit");
 const next12Limit = document.getElementById("next12Limit");
+const nomineesContainer = document.getElementById("nomineesContainer");
+const next12Container = document.getElementById("next12Container");
+const addNomineeBtn = document.getElementById("addNominee");
+const addNext12Btn = document.getElementById("addNext12");
 
+// Show/hide travelDetails section based on Yes/No
+function updateTravelDetails() {
+  if (travelYes.checked) {
+    travelDetails.style.display = "block";
+  } else {
+    travelDetails.style.display = "none";
+    // reset past/next when No
+    togglePast.checked = false;
+    toggleNext.checked = false;
+    updateToggleUI();
+  }
+
+  // Save Yes/No to localStorage
+  localStorage.setItem("travelAnswer", travelYes.checked ? "yes" : "no");
+}
+
+// Show/hide Past & Next sections separately
 function updateToggleUI() {
-  // Show/hide past 12 months container + button
   if (togglePast.checked) {
     nomineesContainer.style.display = "block";
     addNomineeBtn.style.display = "inline-block";
@@ -600,7 +626,6 @@ function updateToggleUI() {
     nomineeLimit.style.display = "none";
   }
 
-  // Show/hide next 12 months container + button
   if (toggleNext.checked) {
     next12Container.style.display = "block";
     addNext12Btn.style.display = "inline-block";
@@ -611,25 +636,38 @@ function updateToggleUI() {
     next12Limit.style.display = "none";
   }
 
-  // Save state to localStorage
+  // Save Past/Next to localStorage
   localStorage.setItem("travelPeriod", JSON.stringify({
     past: togglePast.checked,
     next: toggleNext.checked
   }));
 }
 
-// Bind events
+/* ---------- Bind events ---------- */
+travelYes.addEventListener("change", updateTravelDetails);
+travelNo.addEventListener("change", updateTravelDetails);
 togglePast.addEventListener("change", updateToggleUI);
 toggleNext.addEventListener("change", updateToggleUI);
 
-// On page load, restore saved state
+/* ---------- On page load, restore saved state ---------- */
 document.addEventListener("DOMContentLoaded", () => {
-  const saved = JSON.parse(localStorage.getItem("travelPeriod") || "{}");
-  togglePast.checked = saved.past || false;
-  toggleNext.checked = saved.next || false;
+  // Restore Yes/No
+  const savedAnswer = localStorage.getItem("travelAnswer");
+  if (savedAnswer === "yes") {
+    travelYes.checked = true;
+  } else if (savedAnswer === "no") {
+    travelNo.checked = true;
+  }
+
+  // Restore Past/Next
+  const savedPeriod = JSON.parse(localStorage.getItem("travelPeriod") || "{}");
+  togglePast.checked = savedPeriod.past || false;
+  toggleNext.checked = savedPeriod.next || false;
+
+  // Update UI
+  updateTravelDetails();
   updateToggleUI();
 });
-
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
 let sigTarget = null;
