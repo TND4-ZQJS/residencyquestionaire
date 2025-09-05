@@ -789,7 +789,7 @@ function addCompowner(){
   showSaveStatus();
 }
 
-// RENUMBER (Comppwner Container)
+// RENUMBER (Compowner Container)
 function renumberCompowner(){
   const cards = Array.from(next12Container.querySelectorAll(".compowner"));
   compownerCount = cards.length;
@@ -815,6 +815,40 @@ if (compownerCount === 0) {
 }
 
 addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
+
+/* ---------- Toggle for Company Owner Section ---------- */
+const compownerYes = document.getElementById("ResQ_Company_Yes");
+const compownerNo = document.getElementById("ResQ_Company_No");
+const compownerContainer = document.getElementById("compownerContainer");
+const addCompownerBtn = document.getElementById("addCompowner");
+const compownerLimit = document.getElementById("compownerLimit");
+
+function updateCompownerDisplay() {
+  if (compownerYes.checked) {
+    // Show the container and the button/limit text
+    compownerContainer.style.display = "grid";
+    addCompownerBtn.style.display = "inline-block";
+    compownerLimit.style.display = "block";
+    
+    // If no entries exist, create the first one automatically
+    if (compownerContainer.children.length === 0) {
+      addCompowner();
+    }
+
+  } else {
+    // Hide the container and the button/limit text
+    compownerContainer.style.display = "none";
+    addCompownerBtn.style.display = "none";
+    compownerLimit.style.display = "none";
+  }
+}
+
+// Attach event listeners to the radio buttons
+compownerYes.addEventListener("change", updateCompownerDisplay);
+compownerNo.addEventListener("change", updateCompownerDisplay);
+
+// Call the function on page load to set the initial state
+document.addEventListener("DOMContentLoaded", updateCompownerDisplay);
 
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
