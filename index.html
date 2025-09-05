@@ -39,6 +39,13 @@
   .next12 h3{margin:0 0 8px 0;font-size:0.95rem;display:flex;align-items:center;justify-content:space-between}
   .next12 .remove-btn{background:transparent;border:1px solid var(--line);color:#333;border-radius:8px;padding:6px 10px;font-size:0.9rem}
   .next12 .remove-btn:hover{border-color:#d0d0d7}
+
+    /* Companyowner grid */
+  .compowner-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .compowner{background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;position:relative}
+  .compowner h3{margin:0 0 8px 0;font-size:0.95rem;display:flex;align-items:center;justify-content:space-between}
+  .compowner .remove-btn{background:transparent;border:1px solid var(--line);color:#333;border-radius:8px;padding:6px 10px;font-size:0.9rem}
+  .compowner .remove-btn:hover{border-color:#d0d0d7}
   
   /* Signature preview tiles */
   .sig-preview{
@@ -156,7 +163,12 @@
       <input id="ResQ_Permanent_No_Date" type="text" placeholder="Enter Date">
     </label>
     </div>
-     
+
+    <div id="compownerContainer" class="compowner-grid" style="display:none;"></div>
+    <div class="row">
+      <button id="addCompowner">+ Add Another Entry</button>
+      <small class="muted" id="compownerLimit">Up to 4 Entries</small>
+    </div>
   </section>
 
 <section class="section">
@@ -309,6 +321,7 @@
 const PDF_FILENAME = "Nomination and Trustees_LF4056_LF4054_fillable.pdf";
 const MAX_NOMINEES = 5;
 const MAX_NEXT12ENTRY = 4;
+const MAX_COMPOWNER = 3;
 
 /* ---------- helpers ---------- */
 function $(id){return document.getElementById(id);}
@@ -496,7 +509,7 @@ const addNext12Btn = $("addNext12");
 let next12Count = parseInt(localStorage.getItem("next12Count")) || 0;
 
    
-// Create Nominee Entry
+// Create Next12 Entry
 function createNext12Entry(index){
   const wrap = document.createElement("div");
   wrap.className = "next12";
@@ -533,7 +546,7 @@ function createNext12Entry(index){
   });
 });
 
-  // Bind all inputs/selects to save (Nominess Container)
+  // Bind all inputs/selects to save (Next12 Container)
   wrap.querySelectorAll("input, select").forEach(el=>{
     autoBindSave(el);
     const saved = localStorage.getItem(el.id);
@@ -545,7 +558,7 @@ function createNext12Entry(index){
 
 
 
-  // Remove button (Nominee Container)
+  // Remove button (Next12 Container)
   wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
     next12Container.removeChild(wrap);
     next12Count = Math.max(0, next12Count - 1);
@@ -690,6 +703,109 @@ document.addEventListener("DOMContentLoaded", () => {
   updateTravelDetails();
   updateToggleUI();
 });
+
+  /* ---------- SECTION Company Owner Container ---------- */
+const compownerContainer = $("compownerContainer");
+const addCompownerBtn = $("addCompowner");
+let compownerCount = parseInt(localStorage.getItem("compownerCount")) || 0;
+
+   
+// Create Compowner Entry
+function createCompownerEntry(index){
+  const wrap = document.createElement("div");
+  wrap.className = "comppwner";
+  wrap.dataset.index = index;
+  wrap.innerHTML = `
+    <h3><span>Company Details (Entry ${index})</span>
+    <button type="button" class="remove-btn" aria-label="Remove Entry">Remove</button></h3>
+    <label>Name of Company
+     <input type="text" id="ResQ_Company_Name${index}"></label>
+    <label>Years Incorporated
+      <input type="text" id="ResQ_Company_Year${index}">
+    </label>
+    <label>Country Incorporated
+      <input type="text" id="ResQ_Company_Country${index}">
+    </label>
+    <label>Percentage of Ownership
+      <input type="text" id="ResQ_Company_Percent${index}">
+    </label>
+    <label>Nature of Business
+      <input type="text" id="ResQ_Company_Nature${index}">
+    </label>
+
+     `;
+
+  // Auto uppercase for all text inputs (Compowner Container)
+  wrap.querySelectorAll("input[type=text]").forEach(el=>{
+  if(el.id.includes("_Email")) return; // ❌ skip auto-uppercase for Email
+  el.addEventListener("input", ()=>{ 
+    el.value = el.value.toUpperCase(); 
+    saveElValue(el); 
+  });
+});
+
+  // Bind all inputs/selects to save (Compowner Container)
+  wrap.querySelectorAll("input, select").forEach(el=>{
+    autoBindSave(el);
+    const saved = localStorage.getItem(el.id);
+    if(saved!==null){
+      if(el.type==="checkbox") el.checked = saved==="true";
+      else el.value = saved;
+    }
+  });
+
+
+
+  // Remove button (Compowner Container)
+  wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
+    compownerContainer.removeChild(wrap);
+    compownerCount = Math.max(0, compownerCount - 1);
+    addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
+    renumberCompowner();
+    showSaveStatus();
+  });
+
+  return wrap;
+}
+
+// ADD Compowner Entry (Compowner Container)
+function addCompowner(){
+  if(compownerCount >= MAX_COMPOWNER) return;
+  compownerCount++;
+  const node = createCompownerEntry(compownerCount);
+  compownerContainer.appendChild(node);
+  addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
+  localStorage.setItem("compownerCount", compownerCount);
+  showSaveStatus();
+}
+
+// RENUMBER (Comppwner Container)
+function renumberCompowner(){
+  const cards = Array.from(next12Container.querySelectorAll(".compowner"));
+  compownerCount = cards.length;
+  localStorage.setItem("compownerCount", compownerCount);
+}
+
+// INIT (Comppwner Container)
+addCompownerBtn.addEventListener("click", addCompowner);
+
+
+// Restore saved nominees (Comppwner Container)
+// ---------- Compowner Initialization ----------
+if (compownerCount === 0) {
+  // Always start with Compowner 1
+  compownerCount = 1;
+  localStorage.setItem("compownerCount", compownerCount);
+  compownerContainer.appendChild(createCompownerEntry(1));
+} else {
+  // Restore all saved compowner 1..compownerCount
+  for (let i = 1; i <= compownerCount; i++) {
+    compownerContainer.appendChild(createCompownerEntry(i));
+  }
+}
+
+addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
+
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
 let sigTarget = null;
