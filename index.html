@@ -442,6 +442,7 @@ function createNomineeEntry(index){
 }
 
 // ADD Nominee Entry (Nominee Container)
+let nomineeCount = parseInt(localStorage.getItem("nomineeCount")) || 0;
 function addNominee(){
   if(nomineeCount >= MAX_NOMINEES) return;
   nomineeCount++;
@@ -451,6 +452,7 @@ function addNominee(){
   localStorage.setItem("nomineeCount", nomineeCount);
   showSaveStatus();
 }
+
 
 // RENUMBER (Nominee Container)
 function renumberNominees(){
@@ -547,6 +549,7 @@ function createNext12Entry(index){
 }
 
 // ADD Next12 Entry (Next12 Container)
+let next12Count = parseInt(localStorage.getItem("next12Count")) || 0;
 function addNext12(){
   if(next12Count >= MAX_NEXT12ENTRY) return;
   next12Count++;
@@ -623,6 +626,11 @@ function updateToggleUI() {
     nomineesContainer.style.display = "block";
     addNomineeBtn.style.display = "inline-block";
     nomineeLimit.style.display = "block";
+
+    // Ensure at least 1 nominee exists when shown
+    if (nomineeCount === 0) {
+      addNominee();
+    }
   } else {
     nomineesContainer.style.display = "none";
     addNomineeBtn.style.display = "none";
@@ -633,11 +641,17 @@ function updateToggleUI() {
     next12Container.style.display = "block";
     addNext12Btn.style.display = "inline-block";
     next12Limit.style.display = "block";
+
+    // Ensure at least 1 entry exists when shown
+    if (next12Count === 0) {
+      addNext12();
+    }
   } else {
     next12Container.style.display = "none";
     addNext12Btn.style.display = "none";
     next12Limit.style.display = "none";
   }
+
 
   // Save Past/Next to localStorage
   localStorage.setItem("travelPeriod", JSON.stringify({
