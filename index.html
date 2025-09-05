@@ -721,7 +721,7 @@ let compownerCount = parseInt(localStorage.getItem("compownerCount")) || 0;
 // Create Compowner Entry
 function createCompownerEntry(index){
   const wrap = document.createElement("div");
-  wrap.className = "comppwner";
+  wrap.className = "compowner";
   wrap.dataset.index = index;
   wrap.innerHTML = `
     <h3><span>Company Details (Entry ${index})</span>
