@@ -129,13 +129,13 @@
         <div id="nomineesContainer" class="nominee-grid" style="display:none;"></div>
     <div class="row">
       <button id="addNominee">+ Add Another Nominee</button>
-      <small class="muted">Up to 4 PAST-12-Months Entries</small>
+      <small class="muted" id="nomineeLimit">Up to 4 Entries</small>
     </div>
 
          <div id="next12Container" class="next12-grid" style="display:none;"></div>
     <div class="row">
       <button id="addNext12">+ Add Another Entry</button>
-      <small class="muted">Up to 4 NEXT-12-Months Entries</small>
+      <small class="muted" id="next12Limit">Up to 4 Entries</small>
     </div>
       </section>
 
@@ -585,24 +585,30 @@ addNext12Btn.disabled = next12Count >= MAX_NEXT12ENTRY;
 /* ---------- toggle switch for Past12 and Next12 Container ---------- */
 const togglePast = document.getElementById("togglePast");
 const toggleNext = document.getElementById("toggleNext");
+const nomineeLimit = document.getElementById("nomineeLimit");
+const next12Limit = document.getElementById("next12Limit");
 
 function updateToggleUI() {
   // Show/hide past 12 months container + button
   if (togglePast.checked) {
     nomineesContainer.style.display = "block";
     addNomineeBtn.style.display = "inline-block";
+    nomineeLimit.style.display = "block";
   } else {
     nomineesContainer.style.display = "none";
     addNomineeBtn.style.display = "none";
+    nomineeLimit.style.display = "none";
   }
 
   // Show/hide next 12 months container + button
   if (toggleNext.checked) {
     next12Container.style.display = "block";
     addNext12Btn.style.display = "inline-block";
+    next12Limit.style.display = "block";
   } else {
     next12Container.style.display = "none";
     addNext12Btn.style.display = "none";
+    next12Limit.style.display = "none";
   }
 
   // Save state to localStorage
