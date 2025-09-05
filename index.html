@@ -442,7 +442,6 @@ function createNomineeEntry(index){
 }
 
 // ADD Nominee Entry (Nominee Container)
-let nomineeCount = parseInt(localStorage.getItem("nomineeCount")) || 0;
 function addNominee(){
   if(nomineeCount >= MAX_NOMINEES) return;
   nomineeCount++;
@@ -549,7 +548,6 @@ function createNext12Entry(index){
 }
 
 // ADD Next12 Entry (Next12 Container)
-let next12Count = parseInt(localStorage.getItem("next12Count")) || 0;
 function addNext12(){
   if(next12Count >= MAX_NEXT12ENTRY) return;
   next12Count++;
