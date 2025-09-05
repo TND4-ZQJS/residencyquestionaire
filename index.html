@@ -193,61 +193,14 @@
   <section class="section">
     <h2>Signature Details</h2>
     <div class="row">
-      <label style="flex:1">Signed at (State)
-        <select id="Nom_Nominee_SignState" class="persist">
-          <option value="">-- Select State --</option>
-          <!-- Same label set used in your reference -->
-          <option>SELANGOR</option><option>K.LUMPUR</option><option>MELAKA</option><option>JOHOR</option>
-          <option>N.SEMBILAN</option><option>PENANG</option><option>PERAK</option><option>SABAH</option>
-          <option>SARAWAK</option><option>KELANTAN</option><option>PERLIS</option><option>T'GANU</option>
-          <option>PAHANG</option><option>KEDAH</option>
-        </select>
+      <label style="flex:1">Sign Date
+          <input id="ResQ_Date" type="text" placeholder="Enter Date">
       </label>
     </div>
-    <div class="row">
-      <label style="flex:1">Day
-        <select id="Nom_Nominee_SignDay" class="persist">
-          <option value="">-- Day (DD) --</option>
-          <option>01</option><option>02</option><option>03</option><option>04</option>
-          <option>05</option><option>06</option><option>07</option><option>08</option>
-          <option>09</option><option>10</option><option>11</option><option>12</option>
-          <option>13</option><option>14</option><option>15</option><option>16</option>
-          <option>17</option><option>18</option><option>19</option><option>20</option>
-          <option>21</option><option>22</option><option>23</option><option>24</option>
-          <option>25</option><option>26</option><option>27</option><option>28</option>
-          <option>29</option><option>30</option><option>31</option>
-        </select>
-      </label>
-      <label style="flex:1">Month
-        <select id="Nom_Nominee_SignMonth" class="persist">
-          <option value="">-- Month --</option>
-          <option>JANUARY</option><option>FEBRUARY</option><option>MARCH</option><option>APRIL</option>
-          <option>MAY</option><option>JUNE</option><option>JULY</option><option>AUGUST</option>
-          <option>SEPTEMBER</option><option>OCTOBER</option><option>NOVEMBER</option><option>DECEMBER</option>
-        </select>
-      </label>
-      <label style="flex:1">Year
-        <select id="Nom_Nominee_SignYear" class="persist">
-          <option value="">-- Year (YYYY) --</option>
-          <option>2025</option><option>2026</option>
-        </select>
-      </label>
-    </div>
-  </section>
-
+      
   <!-- SECTION: Owner/Policyowner Signature -->
   <section class="section">
-  <h3>Policy Owner Signature</h3>
-  <div class="row">
-    <label style="flex:1">Policy Owner's Name
-    <input id="Nom_Nominee_PolicyOwner_Name" type="text">
-  </label>
-  </div>
-    <div class="row">
-    <label style="flex:1">NIRC/Passport No.
-      <input id="Nom_Nominee_PolicyOwner_NRIC" type="text">
-    </label>
-  </div>
+  <h3>Life Proposed Signature</h3>
 
   <!-- Tap-to-sign previews (Owner) -->
   <div class="sig-preview" id="preview_owner" onclick="openSig('owner')">
@@ -260,20 +213,7 @@
 
     <!-- SECTION: Witness Signature -->
   <section class="section">
-  <h3>Witness Signature</h3>
-  <div class="row">
-    <label style="flex:1">Witness' Name
-    <input id="Nom_Nominee_Witness_Name" type="text">
-  </label>
-  </div>
-  <div class="row">
-    <label style="flex:1">NIRC/Passport No.
-      <input id="Nom_Nominee_Witness_NIRC" type="text">
-    </label>
-    <label style="flex:1">Mobile
-      <input id="Nom_Nominee_Witness_Mobile" type="text">
-    </label>
-  </div>
+  <h3>Agent as Witness Signature</h3>
 
   <!-- Tap-to-sign previews (Witness) -->
   <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
@@ -281,29 +221,6 @@
   </div>  
   <div class="row">
     <button id="clearPreviewWitness" class="secondary" type="button">Clear Signature</button>
-  </div>
-  </section>
-
-     <!-- SECTION: Trustee Signature -->
-  <section class="section">
-  <h3>Trustee Signature</h3>
-  <div class="row">
-    <label style="flex:1">Trustee's Name
-    <input id="Nom_Nominee_Trustee_Name" type="text">
-  </label>
-  </div>
-    <div class="row">
-    <label style="flex:1">NIRC/Passport No.
-      <input id="Nom_Nominee_Trustee_NIRC" type="text">
-    </label>
-  </div>
-
-  <!-- Tap-to-sign previews (Trustee) -->
-  <div class="sig-preview" id="preview_trustee" onclick="openSig('trustee')">
-    <span>Tap to Sign (Trustee)</span>
-  </div>  
-  <div class="row">
-    <button id="clearPreviewTrustee" class="secondary" type="button">Clear Signature</button>
   </div>
   </section>
 
@@ -876,14 +793,12 @@ function resizeSigCanvas(){
 }
 
 function openSig(target){
-  sigTarget = target; // 'owner' | 'witness' | 'trustee'
+  sigTarget = target; // 'owner' | 'witness'
 
 if (target === 'owner') {
   $("sigModalTitle").textContent = "Sign: Policy Owner";
 } else if (target === 'witness') {
   $("sigModalTitle").textContent = "Sign: Witness";
-} else if (target === 'trustee') {
-  $("sigModalTitle").textContent = "Sign: Trustee";
 }
 
   sigModal.style.display = "block";
@@ -976,12 +891,9 @@ $("clearPreviewWitness").addEventListener("click", ()=>{
   localStorage.removeItem("sig_witness");
   $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
 });
-$("clearPreviewTrustee").addEventListener("click", ()=>{
-  localStorage.removeItem("sig_trustee");
-  $("preview_trustee").innerHTML = `<span>Tap to Sign (Trustee)</span>`;
-});
+
 window.addEventListener("DOMContentLoaded", ()=>{
-  ["owner","witness","trustee"].forEach(role=>{
+  ["owner","witness"].forEach(role=>{
     const saved = localStorage.getItem("sig_"+role);
     if(saved){ $("preview_"+role).innerHTML = `<img alt="Signature ${role}" src="${saved}">`; }
   });
@@ -1093,10 +1005,10 @@ async function fillPDF(){
     const page = pages[pageIndex];
 
 // Owner signature FillPDF
-const sigOwner = localStorage.getItem("sig_owner");
+const sigOwner = localStorage.getItem("sig_resq_owner");
 if (sigOwner) {
   try {
-    const imgOwner = await pdfDoc.embedPng(sigOwner);
+    const imgOwner = await pdfDoc.embedPng(sig_resq_owner);
     const { width, height } = imgOwner.size();
 
     const previewEl = document.getElementById("preview_owner");
@@ -1126,10 +1038,10 @@ if (sigOwner) {
 }
 
 // Witness signature FillPDF
-const sigWitness = localStorage.getItem("sig_witness");
+const sigWitness = localStorage.getItem("sig_resq_witness");
 if (sigWitness) {
   try {
-    const imgWitness = await pdfDoc.embedPng(sigWitness);
+    const imgWitness = await pdfDoc.embedPng(sig_resq_witness);
     const { width, height } = imgWitness.size();
 
     const previewEl = document.getElementById("preview_witness");
@@ -1159,39 +1071,6 @@ if (sigWitness) {
 }
 
 
-// Trustee signature FillPDF
-const sigTrustee = localStorage.getItem("sig_trustee");
-if (sigTrustee) {
-  try {
-    const imgTrustee = await pdfDoc.embedPng(sigTrustee);
-    const { width, height } = imgTrustee.size();
-
-    const previewEl = document.getElementById("preview_trustee");
-    const boxW = previewEl.offsetWidth;
-    const boxH = previewEl.offsetHeight;
-
-    const scale = Math.min(boxW / width, boxH / height);
-    let drawW = width * scale;
-    let drawH = height * scale;
-
-    const factor = 0.40;    // 45% scale
-    const posX = 240;         // X position on PDF
-    const posY = 240;        // Y position on PDF
-
-    drawW *= factor;
-    drawH *= factor;
-
-    page.drawImage(imgTrustee, {
-      x: posX,
-      y: posY,
-      width: drawW,
-      height: drawH
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
-    
     // Flatten form fields before saving
     form.flatten();
     
@@ -1199,7 +1078,8 @@ if (sigTrustee) {
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url; a.download = "Filled_Credit_Card_Form.pdf"; document.body.appendChild(a); a.click(); a.remove();
+    const a = document.createElement("a"); a.href = url; a.download = "Filled_Residency_Questionaire.pdf"; 
+    document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=> URL.revokeObjectURL(url), 2500);
 
   } catch(err){
@@ -1221,10 +1101,10 @@ function resetAll() {
   //    (Everything starting with "Nom_" plus legacy signature keys)
   const keys = Object.keys(localStorage);
   keys.forEach(k => {
-    if (k.startsWith("Nom_")) localStorage.removeItem(k);
+    if (k.startsWith("ResQ_")) localStorage.removeItem(k);
   });
   // Legacy sig keys (if you still use these)
-  ["sig_owner","sig_witness","sig_trustee"].forEach(k => localStorage.removeItem(k));
+  ["sig_resq_owner","sig_resq_witness"].forEach(k => localStorage.removeItem(k));
 
   // 2) Clear the live UI values for Section A/E (inputs that remain in DOM)
   document.querySelectorAll("input, select, textarea").forEach(el => {
@@ -1243,7 +1123,6 @@ function resetAll() {
   // 4) Reset signature previews
   $("preview_owner").innerHTML   = `<span>Tap to Sign (Policy Owner)</span>`;
   $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
-  $("preview_trustee").innerHTML = `<span>Tap to Sign (Trustee)</span>`;
 
   showSaveStatus();
 }
