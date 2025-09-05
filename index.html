@@ -165,20 +165,25 @@
     </div>
 
 <section class="section" id="CompanyOwner">
-    <label style="flex:1">Are you owner/part-owner or serving on the board of directors of any company out of Malaysia?</label>
-    <div class="row">
-        <label class="inline"><input name="Compowner-choose" id="ResQ_Company_Yes" type="radio"> Yes </label>
-        <label class="inline"><input name="Compowner-choose" id="ResQ_Company_No" type="radio"> No </label>
-    </div>
+  <label style="flex:1">Are you owner/part-owner or serving on the board of directors of any company out of Malaysia?</label>
+  <div class="row">
+    <label class="inline"><input name="Compowner-choose" id="ResQ_Company_Yes" type="radio"> Yes </label>
+    <label class="inline"><input name="Compowner-choose" id="ResQ_Company_No"  type="radio"> No </label>
+  </div>
+
+  <!-- Everything below is hidden unless "Yes" -->
+  <div id="compownerDetails" style="display:none;">
     <div class="row" name="providecompdetails">
-        <label>If yes, plesase provide details.</label>
+      <label>If yes, please provide details.</label>
     </div>
-    <div id="compownerContainer" class="compowner-grid" style="display:none;"></div>
-    
+
+    <div id="compownerContainer" class="compowner-grid"></div>
+
     <div class="row"> 
-        <button id="addCompowner">+ Add Another Entry</button>
-        <small class="muted" id="compownerLimit">Up to 3 Entries</small>
+      <button id="addCompowner">+ Add Another Entry</button>
+      <small class="muted" id="compownerLimit">Up to 3 Entries</small>
     </div>
+  </div>
 </section>
 
 <section class="section">
@@ -716,7 +721,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- SECTION Company Owner Container ---------- */
 const compownerContainer = $("compownerContainer");
-const addCompownerBtn = $("addCompowner");
+const addCompownerBtn    = $("addCompowner");
+const compownerLimit     = $("compownerLimit");
+const compownerYes       = $("ResQ_Company_Yes");
+const compownerNo        = $("ResQ_Company_No");
+const compownerDetails   = $("compownerDetails");
 let compownerCount = parseInt(localStorage.getItem("compownerCount")) || 0;
 
    
@@ -791,7 +800,7 @@ function addCompowner(){
 
 // RENUMBER (Compowner Container)
 function renumberCompowner(){
-  const cards = Array.from(next12Container.querySelectorAll(".compowner"));
+  const cards = Array.from(compownerContainer.querySelectorAll(".compowner"));
   compownerCount = cards.length;
   localStorage.setItem("compownerCount", compownerCount);
 }
@@ -801,54 +810,42 @@ addCompownerBtn.addEventListener("click", addCompowner);
 
 
 // Restore saved nominees (Comppwner Container)
-// ---------- Compowner Initialization ----------
-if (compownerCount === 0) {
-  // Always start with Compowner 1
-  compownerCount = 1;
-  localStorage.setItem("compownerCount", compownerCount);
-  compownerContainer.appendChild(createCompownerEntry(1));
-} else {
-  // Restore all saved compowner 1..compownerCount
-  for (let i = 1; i <= compownerCount; i++) {
+
+function restoreCompownerEntries(){
+  compownerContainer.innerHTML = "";
+  // “Same as next12”: ensure at least 1 card exists
+  if (compownerCount === 0) {
+    compownerCount = 1;
+    localStorage.setItem("compownerCount", 1);
+  }
+  for (let i = 1; i <= compownerCount; i++){
     compownerContainer.appendChild(createCompownerEntry(i));
   }
+  addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
 }
 
-addCompownerBtn.disabled = compownerCount >= MAX_COMPOWNER;
+/* ---------- Toggle for Company Owner Section ---------- */function updateCompownerDisplay(){
+  const yes = compownerYes.checked;
+  compownerDetails.style.display = yes ? "block" : "none";
 
-/* ---------- Toggle for Company Owner Section ---------- */
-const compownerYes = document.getElementById("ResQ_Company_Yes");
-const compownerNo = document.getElementById("ResQ_Company_No");
-const compownerContainer = document.getElementById("compownerContainer");
-const addCompownerBtn = document.getElementById("addCompowner");
-const compownerLimit = document.getElementById("compownerLimit");
-
-function updateCompownerDisplay() {
-  if (compownerYes.checked) {
-    // Show the container and the button/limit text
-    compownerContainer.style.display = "grid";
-    addCompownerBtn.style.display = "inline-block";
-    compownerLimit.style.display = "block";
-    
-    // If no entries exist, create the first one automatically
-    if (compownerContainer.children.length === 0) {
-      addCompowner();
-    }
-
-  } else {
-    // Hide the container and the button/limit text
-    compownerContainer.style.display = "none";
-    addCompownerBtn.style.display = "none";
-    compownerLimit.style.display = "none";
+  // If user just turned it on and no entries exist, create/restore them
+  if (yes && compownerContainer.children.length === 0){
+    restoreCompownerEntries();
   }
+  localStorage.setItem("compownerAnswer", yes ? "yes" : "no");
 }
 
-// Attach event listeners to the radio buttons
 compownerYes.addEventListener("change", updateCompownerDisplay);
-compownerNo.addEventListener("change", updateCompownerDisplay);
+compownerNo .addEventListener("change", updateCompownerDisplay);
 
-// Call the function on page load to set the initial state
-document.addEventListener("DOMContentLoaded", updateCompownerDisplay);
+document.addEventListener("DOMContentLoaded", () => {
+  const savedAnswer = localStorage.getItem("compownerAnswer");
+  if (savedAnswer === "yes") compownerYes.checked = true;
+  else if (savedAnswer === "no") compownerNo.checked = true;
+
+  restoreCompownerEntries();
+  updateCompownerDisplay();
+});
 
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
