@@ -458,21 +458,21 @@ function createNext12Entry(index){
     <h3><span>NEXT 12 Months Travel Details (Entry ${index})</span>
     <button type="button" class="remove-btn" aria-label="Remove Entry">Remove</button></h3>
     <label>Country
-     <input type="text" id="ResQ_TravelN12_Country${index}"></label>
+     <input type="text" id="ResQ_Travel_N12_Country${index}"></label>
     <label>Cities
-      <input type="text" id="ResQ_TravelN12_City${index}">
+      <input type="text" id="ResQ_Travel_N12_City${index}">
     </label>
     <label>Duration Per Visit
-      <input type="text" id="ResQ_TravelN12_Duration${index}">
+      <input type="text" id="ResQ_Travel_N12_Duration${index}">
     </label>
     <label>Frequency Per Year
-      <input type="text" id="ResQ_TravelN12_Frequency${index}">
+      <input type="text" id="ResQ_Travel_N12_Frequency${index}">
     </label>
     <label>Date
-      <input type="text" id="ResQ_TravelN12_Date${index}">
+      <input type="text" id="ResQ_Travel_N12_Date${index}">
     </label>
     <label>Purpose
-      <input type="text" id="ResQ_Travel_Purpose${index}">
+      <input type="text" id="ResQ_Travel_N12_Purpose${index}">
     </label>
 
      `;
@@ -1037,94 +1037,85 @@ async function fillPDF(){
     const pdfDoc = await PDFLib.PDFDocument.load(bytes);
     const form = pdfDoc.getForm();
 
-   // Section A - Policy Details FillPDF
-  safeSetText(form, "Nom_PolicyNumber", $("Nom_PolicyNumber").value);
-  safeSetText(form, "Nom_InsuredName", $("Nom_InsuredName").value);
+  // All Text and Radio button FillPDF
+  //Text input
+  safeSetText(form, "ResQ_PolicyNo", $("ResQ_PolicyNo").value);
+  safeSetText(form, "ResQ_LifeInsured_Name", $("ResQ_LifeInsured_Name").value);
+  safeSetText(form, "ResQ_Citizenship", $("ResQ_Citizenship").value);
+  safeSetText(form, "ResQ_StartResiding", $("ResQ_StartResiding").value);
+  safeSetText(form, "ResQ_Permanent_No_Date", $("ResQ_Permanent_No_Date").value);
+  safeSetText(form, "ResQ_Date", $("ResQ_Date").value);
 
-  safeCheck(form, "Nom_MaritalStatus_Single", $("Nom_MaritalStatus_Single").checked);
-  safeCheck(form, "Nom_MaritalStatus_Married", $("Nom_MaritalStatus_Married").checked);
-  safeCheck(form, "Nom_MaritalStatus_Widowed", $("Nom_MaritalStatus_Widowed").checked);
-  safeCheck(form, "Nom_MaritalStatus_Divorced", $("Nom_MaritalStatus_Divorced").checked);
-
-  safeCheck(form, "Nom_Religion_Muslim", $("Nom_Religion_Muslim").checked);
-  safeCheck(form, "Nom_Religion_NonMuslim", $("Nom_Religion_NonMuslim").checked);
-
-  safeCheck(form, "Nom_MaritalStatus_Single", $("Nom_MaritalStatus_Single").checked);
-  safeCheck(form, "Nom_MaritalStatus_Married", $("Nom_MaritalStatus_Married").checked);
-  safeCheck(form, "Nom_MaritalStatus_Widowed", $("Nom_MaritalStatus_Widowed").checked);
-  safeCheck(form, "Nom_MaritalStatus_Divorced", $("Nom_MaritalStatus_Divorced").checked);
-
-  safeCheck(form, "Nom_Religion_Muslim", $("Nom_Religion_Muslim").checked);
-  safeCheck(form, "Nom_Religion_NonMuslim", $("Nom_Religion_NonMuslim").checked);
+  //Radio Input
+  safeCheck(form, "ResQ_Morethan183", $("ResQ_Morethan183").checked);
+  safeCheck(form, "ResQ_Lessthan183", $("ResQ_Lessthan183").checked);
+  safeCheck(form, "ResQ_Travel_Yes", $("ResQ_Travel_Yes").checked);
+  safeCheck(form, "ResQ_Travel_No", $("ResQ_Travel_No").checked);
+  safeCheck(form, "ResQ_Permanent_Yes", $("ResQ_Permanent_Yes").checked);
+  safeCheck(form, "ResQ_Permanent_No", $("ResQ_Permanent_No").checked);
+  safeCheck(form, "ResQ_Company_Yes", $("ResQ_Company_Yes").checked);
+  safeCheck(form, "ResQ_Company_No", $("ResQ_Company_No").checked);
     
-    // Section B - Nominee Container FillPDF
+    // Past12 Container FillPDF
   const nomineesContainer = document.getElementById("nomineesContainer");
   const nominees = nomineesContainer.querySelectorAll(".nominee");
 
   nominees.forEach(n => {
   const idx = n.dataset.index; // example: "1", "2"
   
-  // Nominee Container - Now read all fields for this nominee
-  const nameVal = n.querySelector(`#Nom_Nominee${idx}_Name`)?.value || "";
-  const ddVal   = n.querySelector(`#Nom_Nominee${idx}_DD`)?.value || "";
-  const mmVal   = n.querySelector(`#Nom_Nominee${idx}_MM`)?.value || "";
-  const yyyyVal = n.querySelector(`#Nom_Nominee${idx}_YYYY`)?.value || "";
-  const nricVal = n.querySelector(`#Nom_Nominee${idx}_NRICPassport`)?.value || "";
-  const emailVal = n.querySelector(`#Nom_Nominee${idx}_Email`)?.value || "";
-  const mobileVal = n.querySelector(`#Nom_Nominee${idx}_Mobile`)?.value || "";
-  const nationalityVal = n.querySelector(`#Nom_Nominee${idx}_Nationality`)?.value || "";
-  const relationVal = n.querySelector(`#Nom_Nominee${idx}_Relationship`)?.value || "";
-  const shareVal = n.querySelector(`#Nom_Nominee${idx}_Share`)?.value || "";
-
-  const corres1 = n.querySelector(`#Nom_Nominee${idx}_CorresAdd_Line1`)?.value || "";
-  const corres2 = n.querySelector(`#Nom_Nominee${idx}_CorresAdd_Line2`)?.value || "";
-  const corresPost = n.querySelector(`#Nom_Nominee${idx}_CorresAdd_Postcode`)?.value || "";
-  const corresCountry = n.querySelector(`#Nom_Nominee${idx}_CorresAdd_Country`)?.value || "";
-
-  const res1 = n.querySelector(`#Nom_Nominee${idx}_ResAdd_Line1`)?.value || "";
-  const res2 = n.querySelector(`#Nom_Nominee${idx}_ResAdd_Line2`)?.value || "";
-  const resPost = n.querySelector(`#Nom_Nominee${idx}_ResAdd_Postcode`)?.value || "";
-  const resCountry = n.querySelector(`#Nom_Nominee${idx}_ResAdd_Country`)?.value || "";
-
-  // Nominee Container - Push into PDF fields
-  safeSetText(form, `Nom_Nominee${idx}_Name`, nameVal);
-  safeSetText(form, `Nom_Nominee${idx}_DD`, ddVal);
-  safeSetText(form, `Nom_Nominee${idx}_MM`, mmVal);
-  safeSetText(form, `Nom_Nominee${idx}_YYYY`, yyyyVal);
-  safeSetText(form, `Nom_Nominee${idx}_NRICPassport`, nricVal);
-  safeSetText(form, `Nom_Nominee${idx}_Email`, emailVal);
-  safeSetText(form, `Nom_Nominee${idx}_Mobile`, mobileVal);
-  safeSetText(form, `Nom_Nominee${idx}_Nationality`, nationalityVal);
-  safeSetText(form, `Nom_Nominee${idx}_Relationship`, relationVal);
-  safeSetText(form, `Nom_Nominee${idx}_Share`, shareVal);
-
-  safeSetText(form, `Nom_Nominee${idx}_CorresAdd_Line1`, corres1);
-  safeSetText(form, `Nom_Nominee${idx}_CorresAdd_Line2`, corres2);
-  safeSetText(form, `Nom_Nominee${idx}_CorresAdd_Postcode`, corresPost);
-  safeSetText(form, `Nom_Nominee${idx}_CorresAdd_Country`, corresCountry);
-
-  safeSetText(form, `Nom_Nominee${idx}_ResAdd_Line1`, res1);
-  safeSetText(form, `Nom_Nominee${idx}_ResAdd_Line2`, res2);
-  safeSetText(form, `Nom_Nominee${idx}_ResAdd_Postcode`, resPost);
-  safeSetText(form, `Nom_Nominee${idx}_ResAdd_Country`, resCountry);
+  // Past12 Container - Now read all fields and push to PDF
+  safeSetText(form, `ResQ_TravelP12_Country${idx}`, n.querySelector(`#ResQ_TravelP12_Country${idx}`)?.value);
+  safeSetText(form, `ResQ_TravelP12_City${idx}`, n.querySelector(`#ResQ_TravelP12_City${idx}`)?.value);
+  safeSetText(form, `ResQ_TravelP12_Duration${idx}`, n.querySelector(`#ResQ_TravelP12_Duration${idx}`)?.value);
+  safeSetText(form, `ResQ_TravelP12_Frequency${idx}`, n.querySelector(`#ResQ_TravelP12_Frequency${idx}`)?.value);
+  safeSetText(form, `ResQ_TravelP12_Date${idx}`, n.querySelector(`#ResQ_TravelP12_Date${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_Purpose${idx}`, n.querySelector(`#ResQ_Travel_Purpose${idx}`)?.value);
   });
 
 
-  // Section C - Signing Details - FillPDF 
-  safeSetText(form, "Nom_Nominee_SignState", $("Nom_Nominee_SignState").value);
-  safeSetText(form, "Nom_Nominee_SignDay", $("Nom_Nominee_SignDay").value);
-  safeSetText(form, "Nom_Nominee_SignMonth", $("Nom_Nominee_SignMonth").value);
-  safeSetText(form, "Nom_Nominee_SignYear", $("Nom_Nominee_SignYear").value);
+      // Next12 Container FillPDF
+  const next12Container = document.getElementById("next12Container");
+  const next12 = next12Container.querySelectorAll(".next12");
 
-  safeSetText(form, "Nom_Nominee_PolicyOwner_Name", $("Nom_Nominee_PolicyOwner_Name").value);
-  safeSetText(form, "Nom_Nominee_PolicyOwner_NRIC", $("Nom_Nominee_PolicyOwner_NRIC").value);
-  safeSetText(form, "Nom_Nominee_Trustee_Name", $("Nom_Nominee_Trustee_Name").value);
-  safeSetText(form, "Nom_Nominee_Trustee_NIRC", $("Nom_Nominee_Trustee_NIRC").value);
+  next12.forEach(n => {
+  const idx = n.dataset.index; // example: "1", "2"
+  
+  // Next12 Container - Now read all fields and push to PDF
+  safeSetText(form, `ResQ_Travel_N12_Country${idx}`, n.querySelector(`#ResQ_Travel_N12_Country${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_N12_City${idx}`, n.querySelector(`#ResQ_Travel_N12_City${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_N12_Duration${idx}`, n.querySelector(`#ResQ_Travel_N12_Duration${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_N12_Frequency${idx}`, n.querySelector(`#ResQ_Travel_N12_Frequency${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_N12_Date${idx}`, n.querySelector(`#ResQ_Travel_N12_Date${idx}`)?.value);
+  safeSetText(form, `ResQ_Travel_N12_Purpose${idx}`, n.querySelector(`#ResQ_Travel_N12_Purpose${idx}`)?.value);
+  });
 
-  safeSetText(form, "Nom_Nominee_Witness_Name", $("Nom_Nominee_Witness_Name").value);
-  safeSetText(form, "Nom_Nominee_Witness_NIRC", $("Nom_Nominee_Witness_NIRC").value);
-  safeSetText(form, "Nom_Nominee_Witness_Mobile", $("Nom_Nominee_Witness_Mobile").value);
+    // Occupation Container FillPDF
+  const occupationContainer = document.getElementById("occupationContainer");
+  const occupation = occupationContainer.querySelectorAll(".occupation");
 
+  occupation.forEach(n => {
+  const idx = n.dataset.index; // example: "1", "2"
+  
+  // Occupation Container - Now read all fields and push to PDF
+  safeSetText(form, `ResQ_Occupation_Date${idx}`, n.querySelector(`#ResQ_Occupation_Date${idx}`)?.value);
+  safeSetText(form, `ResQ_Occupation_${idx}`, n.querySelector(`#ResQ_Occupation_${idx}`)?.value);
+  safeSetText(form, `ResQ_Occupation_Duration${idx}`, n.querySelector(`#ResQ_Occupation_Duration${idx}`)?.value);
+  });
+
+      // Company owner Container FillPDF
+  const compownerContainer = document.getElementById("compownerContainer");
+  const compowner = compownerContainer.querySelectorAll(".compowner");
+
+  compowner.forEach(n => {
+  const idx = n.dataset.index; // example: "1", "2"
+  
+  // Occupation Container - Now read all fields and push to PDF
+  safeSetText(form, `ResQ_Company_Name${idx}`, n.querySelector(`#ResQ_Company_Name${idx}`)?.value);
+  safeSetText(form, `ResQ_Company_Year_${idx}`, n.querySelector(`#ResQ_Company_Year${idx}`)?.value);
+  safeSetText(form, `ResQ_Company_Country${idx}`, n.querySelector(`#ResQ_Company_Country${idx}`)?.value);
+  safeSetText(form, `ResQ_Company_Percent${idx}`, n.querySelector(`#ResQ_Company_Percent${idx}`)?.value);
+  safeSetText(form, `ResQ_Company_Nature${idx}`, n.querySelector(`#ResQ_Company_Nature${idx}`)?.value);
+  });
 
     /* --------- SIGNATURE IMAGE EMBEDDING (embedPng + drawImage) --------- */
     const pages = pdfDoc.getPages();
