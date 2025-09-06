@@ -935,7 +935,7 @@ if (target === 'owner') {
   requestAnimationFrame(()=>{
     resizeSigCanvas();
     // If there is an existing signature, draw it to current canvas size
-    const existing = localStorage.getItem("sig_"+target);
+    const existing = localStorage.getItem("sig_resq_"+target);
     if (existing){
       const img = new Image();
       img.onload = ()=>{
