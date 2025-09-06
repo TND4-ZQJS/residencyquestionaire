@@ -960,7 +960,7 @@ function closeSigModal(){
 $("sigDone").addEventListener("click", ()=>{
   if(!sigTarget) return;
   const dataURL = sigCanvas.toDataURL("image/png");
-  localStorage.setItem("sig_"+sigTarget, dataURL);
+  localStorage.setItem("sig_resq_"+sigTarget, dataURL);
   const preview = $("preview_"+sigTarget);
   preview.innerHTML = `<img alt="Signature ${sigTarget}" src="${dataURL}">`;
   closeSigModal();
@@ -1011,11 +1011,11 @@ window.addEventListener("resize", ()=> {
 
 /* Clear preview buttons + restore previews on load */
 $("clearPreviewOwner").addEventListener("click", ()=>{
-  localStorage.removeItem("sig_owner");
+  localStorage.removeItem("sig_resq_owner");
   $("preview_owner").innerHTML = `<span>Tap to Sign (Owner)</span>`;
 });
 $("clearPreviewWitness").addEventListener("click", ()=>{
-  localStorage.removeItem("sig_witness");
+  localStorage.removeItem("sig_resq_witness");
   $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
 });
 
