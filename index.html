@@ -163,7 +163,7 @@
   
   <div id="occupationContainer" class="occupation-grid"></div>
     <div class="row"> 
-      <button id="addCompowner">+ Add Another Entry</button>
+      <button id="addOccupation">+ Add Another Entry</button>
       <small class="muted" id="occupationLimit">Up to 3 Entries</small>
     </div>
   </div>
@@ -273,6 +273,7 @@ const PDF_FILENAME = "Nomination and Trustees_LF4056_LF4054_fillable.pdf";
 const MAX_NOMINEES = 4;
 const MAX_NEXT12ENTRY = 4;
 const MAX_COMPOWNER = 3;
+const MAX_OCCUPATION = 3;
 
 /* ---------- helpers ---------- */
 function $(id){return document.getElementById(id);}
@@ -782,6 +783,104 @@ document.addEventListener("DOMContentLoaded", () => {
   restoreCompownerEntries();
   updateCompownerDisplay();
 });
+
+
+/* ---------- SECTION Occupation Container ---------- */
+const occupationContainer = $("occupationContainer");
+const addOccupationBtn = $("addOccupation");
+let occupationCount = parseInt(localStorage.getItem("occupationCount")) || 0;
+
+   
+// Create Occupation Entry
+function createOccupationEntry(index){
+  const wrap = document.createElement("div");
+  wrap.className = "occupation";
+  wrap.dataset.index = index;
+  wrap.innerHTML = `
+    <h3><span>OCCUPATION Details (Entry ${index})</span>
+    <button type="button" class="remove-btn" aria-label="Remove Entry">Remove</button></h3>
+    <label>Date
+     <input type="text" id="ResQ_Occupation_Date${index}"></label>
+    <label>Occupation
+      <input type="text" id="ResQ_Occupation_${index}">
+    </label>
+    <label>Duration
+      <input type="text" id="ResQ_Occupation_Duration${index}">
+    </label>
+
+     `;
+
+  // Auto uppercase for all text inputs (Occupation Container)
+  wrap.querySelectorAll("input[type=text]").forEach(el=>{
+  if(el.id.includes("_Email")) return; // ❌ skip auto-uppercase for Email
+  el.addEventListener("input", ()=>{ 
+    el.value = el.value.toUpperCase(); 
+    saveElValue(el); 
+  });
+});
+
+  // Bind all inputs/selects to save (Occupation Container)
+  wrap.querySelectorAll("input, select").forEach(el=>{
+    autoBindSave(el);
+    const saved = localStorage.getItem(el.id);
+    if(saved!==null){
+      if(el.type==="checkbox") el.checked = saved==="true";
+      else el.value = saved;
+    }
+  });
+
+
+
+  // Remove button (Occupation Container)
+  wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
+    occupationContainer.removeChild(wrap);
+    occupationCount = Math.max(0, next12Count - 1);
+    addOccupationBtn.disabled = occupationCount >= MAX_OCCUPATION;
+    renumberNext12();
+    showSaveStatus();
+  });
+
+  return wrap;
+}
+
+// ADD Occupation Entry (Occupation Container)
+function addOccupation(){
+  if(occupationCount >= MAX_OCCUPATION) return;
+  occupationCount++;
+  const node = createOccupationEntry(occupationCount);
+  occupationContainer.appendChild(node);
+  addOccupationBtn.disabled = occupationCount >= MAX_OCCUPATION;
+  localStorage.setItem("occupationCount", occupationCount);
+  showSaveStatus();
+}
+
+// RENUMBER (Occupation Container)
+function renumberOccupation(){
+  const cards = Array.from(occupationContainer.querySelectorAll(".occupation"));
+  occupationCount = cards.length;
+  localStorage.setItem("occupationCount", occupationCount);
+}
+
+// INIT (Occupation Container)
+addOccupationBtn.addEventListener("click", addOccupation);
+
+
+// Restore saved nominees (Occupation Container)
+// ---------- Occupation Initialization ----------
+if (occupationCount === 0) {
+  // Always start with Occupation 1
+  occupationCount = 1;
+  localStorage.setItem("occupationCount", occupationCount);
+  occupationContainer.appendChild(createOccupationEntry(1));
+} else {
+  // Restore all saved occupation 1..occupationCount
+  for (let i = 1; i <= occupationCount; i++) {
+    occupationContainer.appendChild(createOccupationEntry(i));
+  }
+}
+
+addNext12Btn.disabled = occupationCount >= MAX_OCCUPATION;
+
 
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
