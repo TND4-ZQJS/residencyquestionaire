@@ -275,7 +275,7 @@
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 <script>
 /* ---------- CONFIG ---------- */
-const PDF_FILENAME = "Nomination and Trustees_LF4056_LF4054_fillable.pdf";
+const PDF_FILENAME = "ResidencyQuestionnaire_LF5166_012022_fillable.pdf";
 const MAX_NOMINEES = 4;
 const MAX_NEXT12ENTRY = 4;
 const MAX_COMPOWNER = 3;
@@ -343,24 +343,6 @@ const nomineesContainer = $("nomineesContainer");
 const addNomineeBtn = $("addNominee");
 let nomineeCount = parseInt(localStorage.getItem("nomineeCount")) || 0;
 
-  
-function relationshipOptionsHTML(selected=""){
-  const opts = ["SPOUSE","SON","DAUGHTER","PARENT","GRANDPARENT","SIBLING","FRIEND"];
-  return opts.map(v=> `<option value="${v}" ${v===selected?"selected":""}>${v}</option>`).join("");
-}
-
-function dayOptionsHTML(selected=""){
-  return Array.from({length:31}, (_,i)=> {
-    const v = String(i+1).padStart(2,"0");
-    return `<option value="${v}" ${v===selected?"selected":""}>${v}</option>`;
-  }).join("");
-}
-function monthOptionsHTML(selected=""){
-  return Array.from({length:12}, (_,i)=> {
-    const v = String(i+1).padStart(2,"0");
-    return `<option value="${v}" ${v===selected?"selected":""}>${v}</option>`;
-  }).join("");
-}
   
 // Create Nominee Entry
 function createNomineeEntry(index){
