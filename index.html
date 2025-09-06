@@ -171,17 +171,23 @@
 
   
   <section class="section" id="permanentstayQ">
-    <label style="flex:1">6. Do you plan to stay in Malaysia permanently?</label>
-      <div class="row">
-      <label class="inline"><input name="Permanentstay" id="ResQ_Permanent_Yes" type="radio"> Yes </label>
-      <label class="inline"><input name="Permanentstay" id="ResQ_Permanent_No" type="radio"> No </label>
-    </div>
+  <label style="flex:1">6. Do you plan to stay in Malaysia permanently?</label>
+  <div class="row">
+    <label class="inline">
+      <input name="Permanentstay" id="ResQ_Permanent_Yes" type="radio"> Yes
+    </label>
+    <label class="inline">
+      <input name="Permanentstay" id="ResQ_Permanent_No" type="radio"> No
+    </label>
+  </div>
 
-     <div class="row" id="dateleaving">
-     <label>If no, when do you plan to leave Malaysia?
+  <!-- Hidden by default -->
+  <div class="row" id="dateleaving" style="display:none;">
+    <label>
+      If no, when do you plan to leave Malaysia?
       <input id="ResQ_Permanent_No_Date" type="text" placeholder="Enter Date">
     </label>
-    </div>
+  </div>
   </section>
 
 <section class="section" id="CompanyOwner">
@@ -881,7 +887,28 @@ if (occupationCount === 0) {
 
 addNext12Btn.disabled = occupationCount >= MAX_OCCUPATION;
 
+/* ---------- SECTION Permanent Stay Logic ---------- */
+document.addEventListener("DOMContentLoaded", function () {
+  const yesRadio = document.getElementById("ResQ_Permanent_Yes");
+  const noRadio = document.getElementById("ResQ_Permanent_No");
+  const dateRow = document.getElementById("dateleaving");
+  const dateInput = document.getElementById("ResQ_Permanent_No_Date");
 
+  function togglePermanentStay() {
+    if (noRadio.checked) {
+      dateRow.style.display = "block";
+    } else {
+      dateRow.style.display = "none";
+      dateInput.value = ""; // clear when hidden
+    }
+  }
+
+  yesRadio.addEventListener("change", togglePermanentStay);
+  noRadio.addEventListener("change", togglePermanentStay);
+
+  // Run once at load to restore state if prefilled
+  togglePermanentStay();
+});
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
 let sigTarget = null;
