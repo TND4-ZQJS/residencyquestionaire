@@ -840,9 +840,9 @@ function createOccupationEntry(index){
   // Remove button (Occupation Container)
   wrap.querySelector(".remove-btn").addEventListener("click", ()=>{
     occupationContainer.removeChild(wrap);
-    occupationCount = Math.max(0, next12Count - 1);
+    occupationCount = Math.max(0, occupationCount - 1);
     addOccupationBtn.disabled = occupationCount >= MAX_OCCUPATION;
-    renumberNext12();
+    renumberOccupation();
     showSaveStatus();
   });
 
@@ -873,16 +873,16 @@ addOccupationBtn.addEventListener("click", addOccupation);
 
 // Restore saved nominees (Occupation Container)
 // ---------- Occupation Initialization ----------
-if (occupationCount === 0) {
-  // Always start with Occupation 1
-  occupationCount = 1;
-  localStorage.setItem("occupationCount", occupationCount);
-  occupationContainer.appendChild(createOccupationEntry(1));
-} else {
+if (occupationCount > 0) {
   // Restore all saved occupation 1..occupationCount
   for (let i = 1; i <= occupationCount; i++) {
     occupationContainer.appendChild(createOccupationEntry(i));
   }
+} else {
+  // No saved entries → start with just 1
+  occupationCount = 1;
+  localStorage.setItem("occupationCount", occupationCount);
+  occupationContainer.appendChild(createOccupationEntry(1));
 }
 
 addNext12Btn.disabled = occupationCount >= MAX_OCCUPATION;
