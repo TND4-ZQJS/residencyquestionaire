@@ -1021,7 +1021,7 @@ $("clearPreviewWitness").addEventListener("click", ()=>{
 
 window.addEventListener("DOMContentLoaded", ()=>{
   ["owner","witness"].forEach(role=>{
-    const saved = localStorage.getItem("sig_"+role);
+    const saved = localStorage.getItem("sig_resq_"+role);
     if(saved){ $("preview_"+role).innerHTML = `<img alt="Signature ${role}" src="${saved}">`; }
   });
 });
@@ -1126,7 +1126,7 @@ async function fillPDF(){
 const sigOwner = localStorage.getItem("sig_resq_owner");
 if (sigOwner) {
   try {
-    const imgOwner = await pdfDoc.embedPng(sig_resq_owner);
+    const imgOwner = await pdfDoc.embedPng(sigOwner);
     const { width, height } = imgOwner.size();
 
     const previewEl = document.getElementById("preview_owner");
@@ -1159,7 +1159,7 @@ if (sigOwner) {
 const sigWitness = localStorage.getItem("sig_resq_witness");
 if (sigWitness) {
   try {
-    const imgWitness = await pdfDoc.embedPng(sig_resq_witness);
+    const imgWitness = await pdfDoc.embedPng(sigWitness);
     const { width, height } = imgWitness.size();
 
     const previewEl = document.getElementById("preview_witness");
