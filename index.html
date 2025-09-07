@@ -1099,6 +1099,17 @@ async function fillPDF(){
   safeCheck(form, "ResQ_Company_Yes", $("ResQ_Company_Yes").checked);
   safeCheck(form, "ResQ_Company_No", $("ResQ_Company_No").checked);
 
+  // Permanency Question
+  if ($("ResQ_Permanent_Yes").checked) {
+  safeCheck(form, "ResQ_Permanent_Yes", true);
+  safeCheck(form, "ResQ_Permanent_No", false);
+  safeSetText(form, "ResQ_Permanent_No_Date", ""); // force blank
+  } else if ($("ResQ_Permanent_No").checked) {
+  safeCheck(form, "ResQ_Permanent_Yes", false);
+  safeCheck(form, "ResQ_Permanent_No", true);
+  safeSetText(form, "ResQ_Permanent_No_Date", $("ResQ_Permanent_No_Date").value);
+  }
+
   // Conditionally fill the travel details only if "Yes" is checked  
   if ($("ResQ_Travel_Yes").checked) {
     // Past12 Container FillPDF
