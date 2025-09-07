@@ -875,56 +875,64 @@ document.addEventListener("DOMContentLoaded", function () {
     const noRadio = document.getElementById("ResQ_Permanent_No");
     const dateRow = document.getElementById("dateleaving");
 
+    // Show/hide the date input
     function togglePermanentStay() {
         if (yesRadio.checked) {
             dateRow.style.display = "none";
         } else if (noRadio.checked) {
             dateRow.style.display = "block";
         } else {
-            // Nothing chosen yet → hide date row
-            dateRow.style.display = "none";
+            dateRow.style.display = "none"; // neither selected
         }
     }
 
+    // Save state to localStorage
     function savePermanentStayState() {
         if (yesRadio.checked) {
             localStorage.setItem("Permanentstay", "yes");
+            console.log("Saving Permanentstay = yes");
         } else if (noRadio.checked) {
             localStorage.setItem("Permanentstay", "no");
+            console.log("Saving Permanentstay = no");
         } else {
             localStorage.removeItem("Permanentstay");
+            console.log("Saving Permanentstay = unset (removed key)");
         }
         showSaveStatus();
     }
 
+    // Restore state from localStorage
     function restorePermanentStayState() {
         const savedState = localStorage.getItem("Permanentstay");
+        console.log("Restoring Permanentstay =", savedState);
+
         if (savedState === "yes") {
             yesRadio.checked = true;
         } else if (savedState === "no") {
             noRadio.checked = true;
         } else {
-            // explicitly clear both
             yesRadio.checked = false;
             noRadio.checked = false;
         }
     }
 
-    // Restore first
+    // Run on page load
     restorePermanentStayState();
-    // Now update UI display
     togglePermanentStay();
+    savePermanentStayState(); // 👈 force write whatever is current
 
     // Event listeners
     yesRadio.addEventListener("change", () => {
         savePermanentStayState();
         togglePermanentStay();
     });
+
     noRadio.addEventListener("change", () => {
         savePermanentStayState();
         togglePermanentStay();
     });
 });
+
 
 
 /* ---------- SIGNATURE MODAL LOGIC (Owner + Payor) with HiDPI scaling ---------- */
