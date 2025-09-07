@@ -902,8 +902,9 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (savedState === "no") {
             noRadio.checked = true;
         } else {
-            // Default to "no" if no state is saved
-            noRadio.checked = true;
+            // No saved state → leave both unchecked
+        yesRadio.checked = false;
+        noRadio.checked = false;
         }
     }
 
