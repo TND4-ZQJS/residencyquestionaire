@@ -1055,7 +1055,9 @@ async function fillPDF(){
   safeCheck(form, "ResQ_Permanent_No", $("ResQ_Permanent_No").checked);
   safeCheck(form, "ResQ_Company_Yes", $("ResQ_Company_Yes").checked);
   safeCheck(form, "ResQ_Company_No", $("ResQ_Company_No").checked);
-    
+
+  // Conditionally fill the travel details only if "Yes" is checked  
+  if ($("ResQ_Travel_Yes").checked) {
     // Past12 Container FillPDF
   const nomineesContainer = document.getElementById("nomineesContainer");
   const nominees = nomineesContainer.querySelectorAll(".nominee");
@@ -1088,7 +1090,8 @@ async function fillPDF(){
   safeSetText(form, `ResQ_Travel_N12_Date${idx}`, n.querySelector(`#ResQ_Travel_N12_Date${idx}`)?.value);
   safeSetText(form, `ResQ_Travel_N12_Purpose${idx}`, n.querySelector(`#ResQ_Travel_N12_Purpose${idx}`)?.value);
   });
-
+  }
+  
     // Occupation Container FillPDF
   const occupationContainer = document.getElementById("occupationContainer");
   const occupation = occupationContainer.querySelectorAll(".occupation");
